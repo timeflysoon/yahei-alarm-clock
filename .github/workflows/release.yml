@@ -23,8 +23,14 @@ jobs:
         with:
           node-version: 20
 
+      - name: 安装 Rust
+        uses: dtolnay/rust-toolchain@stable
+
       - name: 安装依赖
         run: npm install
+
+      - name: 编译
+        run: npm run tauri build
 
       - name: 删除旧 Release
         continue-on-error: true
@@ -32,13 +38,12 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release delete v1.0.0 --yes --cleanup-tag
 
-      - name: 编译并发布（覆盖旧版本）
-        uses: tauri-apps/tauri-action@v0.5
+      - name: 创建 Release 并上传文件
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: v1.0.0                    # 固定使用 v1.0.0
-          releaseName: '极简雅黑桌面闹钟 v1.0.0'
-          releaseBody: '由 GitHub Actions 自动构建的最新 Windows 桌面版本。'
-          releaseDraft: false
-          prerelease: false
+        run: |
+          gh release create v1.0.0 `
+            --title "极简雅黑桌面闹钟 v1.0.0" `
+            --notes "由 GitHub Actions 自动构建的最新 Windows 桌面版本。" `
+            src-tauri/target/release/bundle/nsis/YaheiAlarmClock_1.0.0_x64-setup.exe `
+            src-tauri/target/release/bundle/msi/YaheiAlarmClock_1.0.0_x64_en-US.msi
