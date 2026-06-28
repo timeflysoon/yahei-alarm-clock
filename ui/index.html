@@ -56,11 +56,7 @@
             margin-top: 5px;
         }
         .time-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
             width: 100%;
-            overflow: hidden;
             margin: 0 auto;
         }
         
@@ -78,19 +74,18 @@
             -moz-osx-font-smoothing: grayscale;
             font-smooth: never;
             text-rendering: optimizeSpeed;
+            display: block;
+            width: 100%;
             text-align: center;
-            display: inline-block;
-            position: relative;
-            left: 0;
-            right: 0;
-            width: auto;
-            max-width: 100%;
+            box-sizing: border-box;
+            padding-right: 0.05em;
         }
         @media (max-width: 768px) {
             #time-display {
                 font-size: 14vw;
                 letter-spacing: -1px;
                 font-family: 'DSEG7 Classic', "Microsoft YaHei", "微软雅黑", sans-serif;
+                width: 100%;
             }
             .container {
                 padding: 30px 20px 25px;
