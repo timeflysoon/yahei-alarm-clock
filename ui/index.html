@@ -383,28 +383,6 @@
     </style>
 </head>
 <body>
-<div id="drag-bar" style="
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 40px;
-    -webkit-app-region: drag;
-    z-index: 999;
-"></div>
-
-<button onclick="window.__TAURI__.window.getCurrentWindow().close()" style="
-    position: fixed;
-    top: 8px; right: 12px;
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: #ff5f57;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    color: white;
-    z-index: 1000;
-    line-height: 28px;
-">✕</button>
-
 <div id="custom-alert">
     <h1 style="color:var(--accent-red); font-size: 3.5rem; margin: 0 0 15px 0; font-weight: 700;">时间到了</h1>
     <p id="alert-msg-text" style="font-size: 1.8rem; font-weight: 400; margin-bottom: 35px; color: #1d1d1f;"></p>
