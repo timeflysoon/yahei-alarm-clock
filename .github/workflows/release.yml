@@ -2,7 +2,7 @@ name: Build and Release Tauri App
 
 on:
   # 仅保留手动触发，彻底关闭代码推送时的自动编译
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   release:
@@ -28,17 +28,26 @@ jobs:
       - name: 编译 Tauri 应用
         run: npm run tauri build
 
+      - name: 打包绿色版 zip
+        run: |
+          New-Item -ItemType Directory -Force -Path portable
+          Copy-Item src-tauri\target\release\yahei-alarm-clock.exe portable\
+          Copy-Item ui -Destination portable\ui -Recurse
+          Compress-Archive -Path portable\* -DestinationPath YaheiAlarmClock-portable.zip -Force
+
       - name: 删除旧 Release
-        continue-on-error: true 
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release delete v1.0.0 --yes --cleanup-tag
 
-      - name: 创建 Release 并上传单文件绿色版
+      - name: 创建 Release 并上传文件
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create v1.0.0 `
-            --title "极简雅黑桌面闹钟 (绿色单文件版)" `
-            --notes "由 GitHub Actions 自动构建的免安装纯净版本，双击即开。" `
-            src-tauri/target/release/yahei-alarm-clock.exe
+            --title "极简雅黑桌面闹钟 v1.0.0" `
+            --notes "由 GitHub Actions 自动构建的最新 Windows 桌面版本。" `
+            src-tauri/target/release/bundle/nsis/*.exe `
+            src-tauri/target/release/bundle/msi/*.msi `
+            YaheiAlarmClock-portable.zip
