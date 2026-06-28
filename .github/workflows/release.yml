@@ -1,11 +1,7 @@
 name: Build and Release Tauri App
 
 on:
-  # 每次推送到 main 分支自动触发
-  push:
-    branches:
-      - main 
-  # 支持在 Actions 页面手动点击按钮触发
+  # 仅保留手动触发，彻底关闭代码推送时的自动编译
   workflow_dispatch: 
 
 jobs:
@@ -33,7 +29,7 @@ jobs:
         run: npm run tauri build
 
       - name: 删除旧 Release
-        continue-on-error: true # 即使是第一次运行没有旧版本，也不会报错中断
+        continue-on-error: true 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh release delete v1.0.0 --yes --cleanup-tag
