@@ -9,14 +9,15 @@
     "frontendDist": "../ui"
   },
   "app": {
+    "withGlobalTauri": true,
     "windows": [
       {
         "title": "极简雅黑桌面闹钟",
         "width": 1020,
         "height": 720,
         "resizable": true,
-        "transparent": false,
-        "decorations": true,
+        "transparent": true,
+        "decorations": false,
         "center": true
       }
     ]
