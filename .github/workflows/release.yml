@@ -10,7 +10,6 @@ jobs:
   release:
     permissions:
       contents: write
-
     runs-on: windows-latest
 
     steps:
@@ -27,6 +26,12 @@ jobs:
       - name: 安装依赖
         run: npm install
 
+      - name: 删除旧 Release
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete v1.0.0 --yes --cleanup-tag
+
       - name: 编译并发布（覆盖旧版本）
         uses: tauri-apps/tauri-action@v0.5
         env:
@@ -37,5 +42,3 @@ jobs:
           releaseBody: '由 GitHub Actions 自动构建的最新 Windows 桌面版本。'
           releaseDraft: false
           prerelease: false
-          # 以下参数实现覆盖旧 Release
-          overwrite: true
