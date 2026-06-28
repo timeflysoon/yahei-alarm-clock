@@ -2,9 +2,8 @@
 name = "yahei-alarm-clock"
 version = "1.0.0"
 description = "极简雅黑桌面闹钟"
-authors = ["yourname"]
+authors = ["you"]
 license = ""
-repository = ""
 edition = "2021"
 
 [build-dependencies]
