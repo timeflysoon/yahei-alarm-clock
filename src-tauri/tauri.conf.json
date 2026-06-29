@@ -14,7 +14,7 @@
 "title": "极简雅黑桌面闹钟",
 "width": 680,
 "height": 570,
-"resizable": true,
+"resizable": false,
 "transparent": false,
 "decorations": true,
 "center": true
