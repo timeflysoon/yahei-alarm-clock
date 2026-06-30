@@ -2,10 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>极简雅黑桌面闹钟</title>
     <style>
-        /* ── 字体 ── */
         @font-face {
             font-family: 'DSEG7 Classic';
             src: url('./dseg7-classic.woff2') format('woff2');
@@ -13,7 +12,6 @@
             font-style: normal;
             font-display: swap;
         }
-        /* ── 设计令牌 ── */
         :root {
             --bg1: #f8fafc;
             --bg2: #eef2f6;
@@ -36,9 +34,13 @@
             --btn-press: inset 0 3px 8px rgba(181,191,203,.45), inset 0 -1px 0 rgba(255,255,255,.82),
                           0 2px 4px rgba(31,41,55,.04);
         }
-        /* ── 基础 ── */
         * { box-sizing: border-box; }
         html { -webkit-tap-highlight-color: transparent; }
+
+        /* ── 关键：html/body 允许滚动，不收窄 ── */
+        html, body {
+            min-width: 720px; /* 比容器宽一点留边距 */
+        }
         body {
             font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", -apple-system, "Helvetica Neue", sans-serif;
             background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.98), rgba(255,255,255,.55) 24%, transparent 48%),
@@ -51,7 +53,7 @@
             min-height: 100vh;
             margin: 0;
             overflow: auto;
-            padding: 11px 0 17px;
+            padding: 10px 0 17px; /* 顶部仅10px */
             position: relative;
         }
         body::before {
@@ -70,11 +72,14 @@
             pointer-events: none;
             background: linear-gradient(180deg, rgba(255,255,255,.34), transparent 18%, transparent 82%, rgba(255,255,255,.18));
         }
+
+        /* ── 固定宽度容器，不随视口收窄 ── */
         .container {
             position: relative;
             z-index: 1;
             text-align: center;
-            width: min(672px, 90%);
+            width: 672px;      /* 固定宽度 */
+            flex-shrink: 0;    /* 禁止压缩 */
             padding: 14px 0 18px;
             margin-top: 2px;
             border-radius: 24px;
@@ -360,7 +365,6 @@
             background: linear-gradient(180deg, rgba(255,255,255,.68), rgba(255,255,255,0) 44%);
             pointer-events: none;
         }
-
         .alert-msg-wrapper {
             width: 100%;
             margin: 0 0 21px;
@@ -371,7 +375,6 @@
             box-shadow: var(--inner);
             overflow: hidden;
         }
-
         #alert-msg-text {
             display: block;
             width: 100%;
@@ -383,42 +386,16 @@
             overflow: hidden;
             text-align: center;
         }
-
         #alert-msg-text.marquee-overflow {
             text-align: left;
             -webkit-mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
             mask-image: linear-gradient(to right, transparent 0, black 28px, black calc(100% - 28px), transparent 100%);
         }
-
         .ringing-bg { animation: soft-flash .8s infinite; }
         @keyframes soft-flash {
-            0% { background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.98), rgba(255,255,255,.55) 24%, transparent 48%), radial-gradient(circle at 84% 8%, rgba(255,255,255,.92), rgba(255,255,255,.22) 24%, transparent 54%), linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 46%, var(--bg3) 100%); }
-            50% { background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.98), rgba(255,240,239,.58) 24%, transparent 48%), radial-gradient(circle at 84% 8%, rgba(255,255,255,.92), rgba(255,228,225,.28) 24%, transparent 54%), linear-gradient(180deg, #fff8f7 0%, #fff2ef 46%, #ffedea 100%); }
+            0%   { background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.98), rgba(255,255,255,.55) 24%, transparent 48%), radial-gradient(circle at 84% 8%, rgba(255,255,255,.92), rgba(255,255,255,.22) 24%, transparent 54%), linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 46%, var(--bg3) 100%); }
+            50%  { background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.98), rgba(255,240,239,.58) 24%, transparent 48%), radial-gradient(circle at 84% 8%, rgba(255,255,255,.92), rgba(255,228,225,.28) 24%, transparent 54%), linear-gradient(180deg, #fff8f7 0%, #fff2ef 46%, #ffedea 100%); }
             100% { background: radial-gradient(circle at 18% 12%, rgba(255,255,255,.98), rgba(255,255,255,.55) 24%, transparent 48%), radial-gradient(circle at 84% 8%, rgba(255,255,255,.92), rgba(255,255,255,.22) 24%, transparent 54%), linear-gradient(180deg, var(--bg1) 0%, var(--bg2) 46%, var(--bg3) 100%); }
-        }
-        @media (max-width: 800px) {
-            .panel, .action-area, #status-bar, .holiday-footer { width: 88%; }
-            #time-display { font-size: 4rem; }
-            #custom-alert { width: min(460px, calc(100vw - 48px)); top: calc(50% - 28px); }
-        }
-        @media (max-width: 560px) {
-            body { padding: 6px 0 12px; }
-            .container { width: 96%; padding: 10px 0 13px; border-radius: 17px; }
-            .panel, .action-area, #status-bar, .holiday-footer { width: 94%; }
-            .hero-panel { padding: 14px 11px 12px; border-radius: 17px; }
-            .control-panel { padding: 10px 8px; border-radius: 16px; }
-            #time-display { font-size: 12vw; letter-spacing: -.5px; width: 100%; }
-            #date-display { font-size: .78rem; margin-top: 11px; }
-            .time-row { flex-direction: column; gap: 6px; }
-            .minute-second-row { display: flex; justify-content: center; align-items: center; width: 100%; margin-top: 2px; gap: 4px; }
-            #note { margin-top: 5px; width: 90% !important; max-width: 220px; }
-            .ring-row { flex-direction: column; gap: 7px; }
-            .ring-row > span[style] { margin-left: 0 !important; }
-            .btn-main { width: min(100%, 220px); }
-            #custom-alert { width: calc(100vw - 30px); padding: 20px 13px; border-radius: 17px; top: calc(50% - 12px); }
-            #custom-alert h1 { font-size: 1.8rem !important; }
-            .alert-msg-wrapper { padding: 10px 12px; }
-            #alert-msg-text { font-size: .96rem; }
         }
     </style>
 </head>
@@ -441,10 +418,8 @@
             <div class="row time-row">
                 <span>设定时间</span>
                 <select id="h_sel" onchange="syncManualChange()"></select> 时
-                <div class="minute-second-row">
-                    <select id="m_sel" onchange="syncManualChange()"></select> 分
-                    <select id="s_sel" onchange="syncManualChange()"></select> 秒
-                </div>
+                <select id="m_sel" onchange="syncManualChange()"></select> 分
+                <select id="s_sel" onchange="syncManualChange()"></select> 秒
                 <input type="text" id="note" placeholder="提醒内容 (可选)..." style="width:152px;">
             </div>
         </div>
@@ -490,9 +465,6 @@
     </div>
     <audio id="audio" preload="none"></audio>
     <script>
-        /* ────────────────────────────────────────────
-           DOM 引用
-        ──────────────────────────────────────────── */
         const hS = document.getElementById('h_sel');
         const mS = document.getElementById('m_sel');
         const sS = document.getElementById('s_sel');
@@ -501,9 +473,6 @@
         const mainBtn = document.getElementById('main-btn');
         const noteInput = document.getElementById('note');
 
-        /* ────────────────────────────────────────────
-           全局状态
-        ──────────────────────────────────────────── */
         let alarmConfig = null;
         let isRinging = false;
         let autoStopTimer = null;
@@ -518,13 +487,10 @@
         const ALERT_MARQUEE_SPEED = 42;
         const ALERT_MARQUEE_PAUSE = 1100;
 
-        /* ────────────────────────────────────────────
-           节日数据
-        ──────────────────────────────────────────── */
         const holidays = [
-            { name: "春节", icon: "🧨", type: "lunar", dates: ["2026-02-17","2027-02-06","2028-01-26","2029-02-13","2030-02-03","2031-01-23","2032-02-11","2033-01-31","2034-02-19","2035-02-08","2036-01-28","2037-02-15","2038-02-04","2039-01-24","2040-02-12","2041-01-31","2042-02-19","2043-02-08","2044-01-28","2045-02-15","2046-02-04","2047-01-24","2048-02-12","2049-01-31","2050-02-19","2051-02-08","2052-01-28","2053-02-15","2054-02-04","2055-01-24","2056-02-12","2057-02-01","2058-01-21","2059-02-09","2060-01-29","2061-02-16","2062-02-05","2063-01-25","2064-02-13","2065-02-02","2066-01-22","2067-02-10","2068-01-30","2069-02-17","2070-02-06","2071-01-26","2072-02-14","2073-02-03","2074-01-23","2075-02-11","2076-01-31","2077-02-18","2078-02-07","2079-01-27","2080-02-15","2081-02-04","2082-01-24","2083-02-12","2084-02-01","2085-01-21","2086-02-09","2087-01-29","2088-02-17","2089-02-05","2090-01-25"] },
-            { name: "元宵", icon: "🏮", type: "lunar", dates: ["2026-03-03","2027-02-20","2028-02-09","2029-03-01","2030-02-17","2031-02-06","2032-02-25","2033-02-14","2034-03-04","2035-02-22","2036-02-11","2037-03-01","2038-02-18","2039-02-07","2040-02-26","2041-02-14","2042-03-05","2043-02-22","2044-02-11","2045-03-02","2046-02-19","2047-02-08","2048-02-27","2049-02-15","2050-03-07","2051-02-24","2052-02-13","2053-03-03","2054-02-21","2055-02-10","2056-02-28","2057-02-17","2058-02-06","2059-02-25","2060-02-14","2061-03-04","2062-02-21","2063-02-10","2064-02-29","2065-02-17","2066-02-06","2067-02-25","2068-02-14","2069-03-04","2070-02-21","2071-02-10","2072-02-28","2073-02-17","2074-02-06","2075-02-25","2076-02-14","2077-03-04","2078-02-21","2079-02-10","2080-02-29","2081-02-18","2082-02-07","2083-02-26","2084-02-15","2085-02-04","2086-02-23","2087-02-12","2088-03-02","2089-02-19","2090-02-08"] },
-            { name: "中秋", icon: "🥮", type: "lunar", dates: ["2026-09-25","2027-09-15","2028-10-03","2029-09-22","2030-09-12","2031-10-01","2032-09-19","2033-09-08","2034-09-27","2035-09-16","2036-10-04","2037-09-24","2038-09-13","2039-10-02","2040-09-20","2041-09-09","2042-09-29","2043-09-18","2044-10-06","2045-09-26","2046-09-15","2047-10-04","2048-09-22","2049-09-11","2050-09-30","2051-09-19","2052-10-07","2053-09-27","2054-09-16","2055-10-05","2056-09-24","2057-09-13","2058-10-02","2059-09-21","2060-09-10","2061-09-29","2062-09-18","2063-10-07","2064-09-25","2065-09-15","2066-10-04","2067-09-23","2068-09-12","2069-10-01","2070-09-20","2071-09-09","2072-09-28","2073-09-17","2074-10-06","2075-09-25","2076-09-14","2077-10-03","2078-09-22","2079-09-11","2080-09-30","2081-09-19","2082-10-08","2083-09-27","2084-09-16","2085-10-05","2086-09-24","2087-09-13","2088-10-02","2089-09-21","2090-09-10"] },
+            { name: "春节", icon: "🧨", type: "lunar", dates: ["2026-02-17","2027-02-06","2028-01-26","2029-02-13","2030-02-03","2031-01-23","2032-02-11","2033-01-31","2034-02-19","2035-02-08","2036-01-28","2037-02-15","2038-02-04","2039-01-24","2040-02-12","2041-01-31","2042-02-19","2043-02-08","2044-01-28","2045-02-15","2046-02-04","2047-01-24","2048-02-12","2049-01-31","2050-02-19"] },
+            { name: "元宵", icon: "🏮", type: "lunar", dates: ["2026-03-03","2027-02-20","2028-02-09","2029-03-01","2030-02-17","2031-02-06","2032-02-25","2033-02-14","2034-03-04","2035-02-22","2036-02-11","2037-03-01","2038-02-18","2039-02-07","2040-02-26","2041-02-14","2042-03-05","2043-02-22","2044-02-11","2045-03-02","2046-02-19","2047-02-08","2048-02-27","2049-02-15","2050-03-07"] },
+            { name: "中秋", icon: "🥮", type: "lunar", dates: ["2026-09-25","2027-09-15","2028-10-03","2029-09-22","2030-09-12","2031-10-01","2032-09-19","2033-09-08","2034-09-27","2035-09-16","2036-10-04","2037-09-24","2038-09-13","2039-10-02","2040-09-20","2041-09-09","2042-09-29","2043-09-18","2044-10-06","2045-09-26","2046-09-15","2047-10-04","2048-09-22","2049-09-11","2050-09-30"] },
             { name: "元旦", icon: "🥳", month: 1, day: 1 },
             { name: "五一", icon: "🛠️", month: 5, day: 1 },
             { name: "国庆", icon: "🎉", month: 10, day: 1 }
@@ -541,22 +507,11 @@
             return diff < 0 ? 0 : diff;
         }
 
-        /* ────────────────────────────────────────────
-           跑马灯
-        ──────────────────────────────────────────── */
         function stopAlertMarquee() {
-            if (alertMarqueeRAF) {
-                cancelAnimationFrame(alertMarqueeRAF);
-                alertMarqueeRAF = null;
-            }
-            alertMarqueeLastTime = 0;
-            alertMarqueeDirection = 1;
-            alertMarqueePauseUntil = 0;
+            if (alertMarqueeRAF) { cancelAnimationFrame(alertMarqueeRAF); alertMarqueeRAF = null; }
+            alertMarqueeLastTime = 0; alertMarqueeDirection = 1; alertMarqueePauseUntil = 0;
             const msgBox = document.getElementById('alert-msg-text');
-            if (msgBox) {
-                msgBox.scrollLeft = 0;
-                msgBox.classList.remove('marquee-overflow');
-            }
+            if (msgBox) { msgBox.scrollLeft = 0; msgBox.classList.remove('marquee-overflow'); }
         }
         function startAlertMarquee() {
             const msgBox = document.getElementById('alert-msg-text');
@@ -564,10 +519,7 @@
             requestAnimationFrame(() => {
                 const maxScroll = msgBox.scrollWidth - msgBox.clientWidth;
                 msgBox.scrollLeft = 0;
-                if (maxScroll <= 0) {
-                    msgBox.classList.remove('marquee-overflow');
-                    return;
-                }
+                if (maxScroll <= 0) { msgBox.classList.remove('marquee-overflow'); return; }
                 msgBox.classList.add('marquee-overflow');
                 alertMarqueeDirection = 1;
                 alertMarqueePauseUntil = performance.now() + ALERT_MARQUEE_PAUSE;
@@ -581,13 +533,9 @@
                     if (ts >= alertMarqueePauseUntil) {
                         let next = msgBox.scrollLeft + alertMarqueeDirection * ALERT_MARQUEE_SPEED * delta;
                         if (alertMarqueeDirection === 1 && next >= currentMax) {
-                            next = currentMax;
-                            alertMarqueeDirection = -1;
-                            alertMarqueePauseUntil = ts + ALERT_MARQUEE_PAUSE;
+                            next = currentMax; alertMarqueeDirection = -1; alertMarqueePauseUntil = ts + ALERT_MARQUEE_PAUSE;
                         } else if (alertMarqueeDirection === -1 && next <= 0) {
-                            next = 0;
-                            alertMarqueeDirection = 1;
-                            alertMarqueePauseUntil = ts + ALERT_MARQUEE_PAUSE;
+                            next = 0; alertMarqueeDirection = 1; alertMarqueePauseUntil = ts + ALERT_MARQUEE_PAUSE;
                         }
                         msgBox.scrollLeft = next;
                     }
@@ -597,9 +545,6 @@
             });
         }
 
-        /* ────────────────────────────────────────────
-           初始化
-        ──────────────────────────────────────────── */
         function init() {
             const populate = (el, max) => {
                 for (let i = 0; i <= max; i++) {
@@ -609,9 +554,7 @@
                     el.appendChild(opt);
                 }
             };
-            populate(hS, 23);
-            populate(mS, 59);
-            populate(sS, 59);
+            populate(hS, 23); populate(mS, 59); populate(sS, 59);
             syncSelectorsToNow();
             audio.volume = 1.0;
             parsedHolidays = holidays.map(h =>
@@ -622,25 +565,18 @@
         }
         function syncSelectorsToNow() {
             const now = new Date();
-            hS.value = now.getHours();
-            mS.value = now.getMinutes();
-            sS.value = now.getSeconds();
+            hS.value = now.getHours(); mS.value = now.getMinutes(); sS.value = now.getSeconds();
         }
         const formatTime = (cfg) =>
             `${cfg.h.toString().padStart(2,'0')}:${cfg.m.toString().padStart(2,'0')}:${cfg.s.toString().padStart(2,'0')}`;
 
-        /* ────────────────────────────────────────────
-           主循环
-        ──────────────────────────────────────────── */
         function update() {
             const now = new Date();
             document.getElementById('time-display').innerText = now.toTimeString().split(' ')[0];
             const daysArr = ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'];
             document.getElementById('date-display').innerText =
                 `${now.getFullYear()}年${now.getMonth()+1}月${now.getDate()}日 ${daysArr[now.getDay()]}`;
-            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
-                updateHolidayCountdown();
-            }
+            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) updateHolidayCountdown();
 
             if (alarmConfig && !isRinging) {
                 const currentSec = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
@@ -663,9 +599,6 @@
             }
         }
 
-        /* ────────────────────────────────────────────
-           快捷增减 / 手动拨选
-        ──────────────────────────────────────────── */
         function handleQuickSet(minutes) {
             if (isRinging) return;
             let h = alarmConfig ? alarmConfig.h : parseInt(hS.value);
@@ -674,48 +607,27 @@
             let totalSec = h * 3600 + m * 60 + s + minutes * 60;
             if (totalSec < 0) totalSec += 86400;
             if (totalSec >= 86400) totalSec -= 86400;
-            h = Math.floor(totalSec / 3600);
-            m = Math.floor((totalSec % 3600) / 60);
-            s = totalSec % 60;
+            h = Math.floor(totalSec / 3600); m = Math.floor((totalSec % 3600) / 60); s = totalSec % 60;
             alarmConfig = { h, m, s };
-            hS.value = h;
-            mS.value = m;
-            sS.value = s;
-            mainBtn.innerText = '取消闹钟';
-            mainBtn.className = 'btn-main btn-cancel';
+            hS.value = h; mS.value = m; sS.value = s;
+            mainBtn.innerText = '取消闹钟'; mainBtn.className = 'btn-main btn-cancel';
             update();
         }
         function syncManualChange() {
             if (isRinging) return;
-            alarmConfig = {
-                h: parseInt(hS.value),
-                m: parseInt(mS.value),
-                s: parseInt(sS.value)
-            };
-            mainBtn.innerText = '取消闹钟';
-            mainBtn.className = 'btn-main btn-cancel';
+            alarmConfig = { h: parseInt(hS.value), m: parseInt(mS.value), s: parseInt(sS.value) };
+            mainBtn.innerText = '取消闹钟'; mainBtn.className = 'btn-main btn-cancel';
             statusBar.innerText = `已设定闹钟 ${formatTime(alarmConfig)}，倒计时更新中...`;
             statusBar.style.color = 'var(--green)';
             if (window._syncTimer) clearTimeout(window._syncTimer);
-            window._syncTimer = setTimeout(() => {
-                update();
-                window._syncTimer = null;
-            }, 800);
+            window._syncTimer = setTimeout(() => { update(); window._syncTimer = null; }, 800);
         }
 
-        /* ────────────────────────────────────────────
-           启动 / 取消 闹钟
-        ──────────────────────────────────────────── */
         function toggleAlarm() {
             if (isRinging) { cancelAlarm(); return; }
             if (alarmConfig) { cancelAlarm(); } else {
-                alarmConfig = {
-                    h: parseInt(hS.value),
-                    m: parseInt(mS.value),
-                    s: parseInt(sS.value)
-                };
-                mainBtn.innerText = '取消闹钟';
-                mainBtn.className = 'btn-main btn-cancel';
+                alarmConfig = { h: parseInt(hS.value), m: parseInt(mS.value), s: parseInt(sS.value) };
+                mainBtn.innerText = '取消闹钟'; mainBtn.className = 'btn-main btn-cancel';
                 statusBar.innerText = `已设定闹钟 ${formatTime(alarmConfig)}`;
                 statusBar.style.color = 'var(--green)';
                 update();
@@ -731,102 +643,65 @@
                 startAlertMarquee();
             });
         }
-
         function startAlarm() {
             if (isRinging) return;
             isRinging = true;
-
             document.body.classList.add('ringing-bg');
             statusBar.innerText = '🔔 正在响铃...';
-            mainBtn.innerText = '停止响铃';
-            mainBtn.className = 'btn-main btn-cancel';
-
+            mainBtn.innerText = '停止响铃'; mainBtn.className = 'btn-main btn-cancel';
             const noteText = noteInput.value.trim();
             if (noteText !== '') {
                 document.getElementById('alert-msg-text').innerText = noteText;
                 prepareAlert();
             }
-
             audio.src = document.getElementById('ring_src').value;
             audio.loop = true;
             audio.play().catch((e) => {
                 statusBar.innerText = '🔔 正在响铃（无声音，请点击页面激活音频）';
                 statusBar.style.color = 'var(--orange)';
-                console.warn('音频播放失败，视觉提醒仍在运行:', e);
             });
-
             const duration = parseInt(document.getElementById('duration_sel').value);
             if (duration > 0) {
                 if (autoStopTimer) clearTimeout(autoStopTimer);
-                autoStopTimer = setTimeout(() => {
-                    cancelAlarm();
-                    resetTestBtn();
-                }, duration * 1000);
+                autoStopTimer = setTimeout(() => { cancelAlarm(); resetTestBtn(); }, duration * 1000);
             }
         }
-
         function cancelAlarm() {
-            isRinging = false;
-            alarmConfig = null;
-            if (autoStopTimer) {
-                clearTimeout(autoStopTimer);
-                autoStopTimer = null;
-            }
+            isRinging = false; alarmConfig = null;
+            if (autoStopTimer) { clearTimeout(autoStopTimer); autoStopTimer = null; }
             stopAlertMarquee();
-            audio.pause();
-            audio.currentTime = 0;
-            audio.loop = false;
+            audio.pause(); audio.currentTime = 0; audio.loop = false;
             document.body.classList.remove('ringing-bg');
             document.getElementById('custom-alert').style.display = 'none';
             document.getElementById('alert-msg-text').innerText = '';
-            mainBtn.innerText = '启动闹钟';
-            mainBtn.className = 'btn-main btn-set';
-            syncSelectorsToNow();
-            resetTestBtn();
-            updateHolidayCountdown();
+            mainBtn.innerText = '启动闹钟'; mainBtn.className = 'btn-main btn-set';
+            syncSelectorsToNow(); resetTestBtn(); updateHolidayCountdown();
         }
 
-        /* ────────────────────────────────────────────
-           试听
-        ──────────────────────────────────────────── */
         function resetTestBtn() {
             const btn = document.getElementById('test-btn');
-            if (!btn) return;
-            if (isRinging) return;
-            audio.pause();
-            audio.currentTime = 0;
-            audio.loop = false;
-            btn.innerText = '试听';
-            btn.className = 'btn-main btn-test';
+            if (!btn || isRinging) return;
+            audio.pause(); audio.currentTime = 0; audio.loop = false;
+            btn.innerText = '试听'; btn.className = 'btn-main btn-test';
             isTestPlaying = false;
         }
         function toggleTest() {
             const btn = document.getElementById('test-btn');
             if (isRinging) {
                 statusBar.innerText = '⚠️ 闹钟响铃中，请先停止闹钟再试听';
-                statusBar.style.color = 'var(--red)';
-                return;
+                statusBar.style.color = 'var(--red)'; return;
             }
-            if (isTestPlaying || !audio.paused) {
-                resetTestBtn();
-                return;
-            }
+            if (isTestPlaying || !audio.paused) { resetTestBtn(); return; }
             audio.src = document.getElementById('ring_src').value;
             audio.loop = false;
             audio.play().then(() => {
-                btn.innerText = '停止';
-                btn.className = 'btn-main btn-stop-test';
-                isTestPlaying = true;
-            }).catch((e) => {
+                btn.innerText = '停止'; btn.className = 'btn-main btn-stop-test'; isTestPlaying = true;
+            }).catch(() => {
                 statusBar.innerText = '⚠️ 请点击页面激活声音后试听';
                 statusBar.style.color = 'var(--red)';
-                console.error('试听播放失败:', e);
             });
         }
 
-        /* ────────────────────────────────────────────
-           节日倒计时
-        ──────────────────────────────────────────── */
         function renderHoliday(h, days) {
             document.getElementById('holiday-icon').innerText = h.icon;
             const lbl = document.getElementById('holiday-label');
@@ -834,42 +709,24 @@
             const unt = document.getElementById('holiday-unit');
             const nameEl = document.getElementById('holiday-name');
             const daysEl = document.getElementById('holiday-days');
-            daysEl.style.color = 'var(--text)';
-            daysEl.style.fontSize = '.95rem';
+            daysEl.style.color = 'var(--text)'; daysEl.style.fontSize = '.95rem';
             if (days === 0) {
-                lbl.innerText = '今天是';
-                nameEl.innerText = h.name;
-                mid.innerText = '';
-                unt.innerText = '';
-                daysEl.innerText = '🎉 节日快乐';
-                daysEl.style.color = 'var(--green)';
-                daysEl.style.fontSize = '1rem';
-                daysEl.style.fontWeight = '700';
+                lbl.innerText = '今天是'; nameEl.innerText = h.name; mid.innerText = ''; unt.innerText = '';
+                daysEl.innerText = '🎉 节日快乐'; daysEl.style.color = 'var(--green)';
+                daysEl.style.fontSize = '1rem'; daysEl.style.fontWeight = '700';
                 nameEl.style.color = 'var(--green)';
-                if (!alarmConfig) {
-                    statusBar.innerText = `今天是${h.name}，祝您节日快乐！🎉`;
-                    statusBar.style.color = 'var(--green)';
-                }
+                if (!alarmConfig) { statusBar.innerText = `今天是${h.name}，祝您节日快乐！🎉`; statusBar.style.color = 'var(--green)'; }
             } else {
-                lbl.innerText = '距离';
-                nameEl.innerText = h.name;
-                mid.innerText = '还有';
-                daysEl.innerText = days;
-                unt.innerText = '天';
-                nameEl.style.color = 'var(--text)';
+                lbl.innerText = '距离'; nameEl.innerText = h.name; mid.innerText = '还有';
+                daysEl.innerText = days; unt.innerText = '天'; nameEl.style.color = 'var(--text)';
             }
         }
         function findNextTarget(h) {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
             if (h.parsedDates) {
-                let target = h.parsedDates.find(d =>
-                    new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0) >= today
-                );
-                if (!target) {
-                    const nextYear = h.parsedDates.filter(d => d.getFullYear() > today.getFullYear());
-                    target = nextYear.length > 0 ? nextYear[0] : h.parsedDates[h.parsedDates.length - 1];
-                }
+                let target = h.parsedDates.find(d => new Date(d.getFullYear(), d.getMonth(), d.getDate()) >= today);
+                if (!target) target = h.parsedDates[h.parsedDates.length - 1];
                 return target;
             } else {
                 let target = new Date(now.getFullYear(), h.month - 1, h.day, 0, 0, 0, 0);
@@ -884,60 +741,35 @@
             let minDays = Infinity, bestIdx = 0;
             parsedHolidays.forEach((h, i) => {
                 const target = findNextTarget(h);
-                if (target) {
-                    const diff = calculateDaysBetween(today, target);
-                    if (diff < minDays) { minDays = diff; bestIdx = i; }
-                }
+                if (target) { const diff = calculateDaysBetween(today, target); if (diff < minDays) { minDays = diff; bestIdx = i; } }
             });
             currentHolidayIndex = bestIdx;
             renderHoliday(parsedHolidays[bestIdx], minDays);
             if (!alarmConfig) {
-                if (minDays === 0) {
-                    statusBar.innerText = `今天是${parsedHolidays[bestIdx].name}，祝您节日快乐！🎉`;
-                    statusBar.style.color = 'var(--green)';
-                } else {
-                    statusBar.innerText = '';
-                }
+                if (minDays === 0) { statusBar.innerText = `今天是${parsedHolidays[bestIdx].name}，祝您节日快乐！🎉`; statusBar.style.color = 'var(--green)'; }
+                else statusBar.innerText = '';
             }
         }
-
-        /* ★━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-           修复：点击节日时按"由近到远"排序循环
-           ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
         function switchHoliday() {
             if (!parsedHolidays) return;
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-
-            // 计算每个节日的倒计时天数，按由近到远排序
             const sorted = parsedHolidays.map((h, idx) => {
                 const target = findNextTarget(h);
                 const days = target ? calculateDaysBetween(today, target) : Infinity;
                 return { ...h, index: idx, days, target };
             }).sort((a, b) => a.days - b.days);
-
-            // 找到当前显示的节日在排序列表中的位置
             const currentIdx = sorted.findIndex(item => item.index === currentHolidayIndex);
-            // 切换到下一个（由近到远）
             const nextIdx = (currentIdx + 1) % sorted.length;
             const next = sorted[nextIdx];
-
             currentHolidayIndex = next.index;
             renderHoliday(next, next.days);
-
             if (!alarmConfig) {
-                if (next.days === 0) {
-                    statusBar.innerText = `今天是${next.name}，祝您节日快乐！🎉`;
-                    statusBar.style.color = 'var(--green)';
-                } else {
-                    statusBar.innerText = '';
-                }
+                if (next.days === 0) { statusBar.innerText = `今天是${next.name}，祝您节日快乐！🎉`; statusBar.style.color = 'var(--green)'; }
+                else statusBar.innerText = '';
             }
         }
 
-        /* ────────────────────────────────────────────
-           启动
-        ──────────────────────────────────────────── */
         init();
         setInterval(update, 1000);
     </script>
