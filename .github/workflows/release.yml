@@ -62,7 +62,7 @@ jobs:
           gh release create v1.0.0 `
             --title "极简雅黑桌面闹钟 v1.0.0" `
             --notes "离线完整版（带 ui 文件夹） + 单文件绿色便携版（在线资源）" `
-            release-backup/*.exe `
-            release-backup/*.msi `
+            release-backup/YaheiAlarmClock_1.0.0_x64-setup.exe `
+            release-backup/YaheiAlarmClock_1.0.0_x64_en-US.msi `
             YaheiAlarmClock-SingleFile.zip `
             YaheiAlarmClock-Portable.zip
