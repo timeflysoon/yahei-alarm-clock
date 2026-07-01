@@ -9,6 +9,9 @@
     "frontendDist": "../ui"
   },
   "app": {
+    "security": {
+      "csp": "default-src 'self'; media-src 'self' https://clockcn.com https://www.soundhelix.com https://www.naobiao.com; font-src 'self' https://cdn.jsdelivr.net"
+    },
     "windows": [
       {
         "title": "极简雅黑桌面闹钟",
